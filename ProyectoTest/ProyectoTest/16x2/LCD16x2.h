@@ -14,8 +14,8 @@
 #include <stdio.h>
 #include "../i2c/I2C_implement_me.h"
 
-#define LCD16X2_READ	0x4F
-#define LCD16X2_WRITE 	0x4E
+#define LCD16X2_READ	0x7F
+#define LCD16X2_WRITE 	0x7E
 
 
 /*

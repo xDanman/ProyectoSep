@@ -53,7 +53,6 @@ double Procio(double temp, double hum);
 int debouncer(int boton);
 int16_t tmp102Read(void);
 
-
 /*                   Globals               */
 
 volatile bool A_Temperatura = false;
@@ -65,9 +64,6 @@ volatile bool A_Rocio = false;
 volatile bool A_Prediccion = false;
 volatile bool Mostrar_LCD = false;
 
-//Array que envia al wifi con los datos se organiza:
-uint8_t *wifi_buf;
-static uint8_t Wifi_Buff[25];  //Se envia temp, hum, presion, alt, lluvia, rocio, predcc
 //4bytes Temp, 4bytes Hum, 4bytes Presion, 4bytes altura, 2bytes lluvia, 4bytes Rocio, 1bytes prediccion= 23 bytes
 
 
@@ -115,29 +111,31 @@ int main(void)
 	char buffertm[6];
 	char bufferhm[6];
 	/////////////Initialization/////
+	struct USART_configuration config_57600_8N1 = {57600, 8, 'N', 1};//125200seteado
 	
+	USART_Init(config_57600_8N1);
+
 	init_GPIO();
 	i2c_begin();
 	LCD_init();
 	setup_adc();		
 	begin_bmp180();
 	DHT_Setup();
-	struct USART_configuration config_57600_8N1 = {57600, 8, 'N', 1};
-	USART_Init(config_57600_8N1);
+	//struct USART_configuration config_57600_8N1 = {57600, 8, 'N', 1};//125200seteado
+	//USART_Init(config_57600_8N1);
 	RTC_GetDateTime(&Reloj);
 	////////////////////////////////
 	
 	sei();
 	
-	
-	LCD_string("Bienvenido");
+	LCD_string("Bienvenido al");
 	LCD_Cmd(0xC0);
-	LCD_string("Sistema Clima!!");
+	LCD_string("Sistema de Clima");
 	
-	_delay_ms(3000);
+	_delay_ms(2500);
 	
 	LCD_Cmd(0x01);// Clear
-	LCD_string("Aprete boton:");
+	LCD_string("Aprete boton");
 	LCD_Cmd(0xC0);
 	LCD_string("Aceptar");
 	
@@ -153,7 +151,7 @@ int main(void)
 	                      LCD_string("Controles:");
 						  _delay_ms(2000);
 						  LCD_Cmd(0x01);
-						  LCD_string("Izquierda: Btn 1");
+						  LCD_string("Izquierda: Btn 2");
 						  LCD_Cmd(0xC0);
 						  LCD_string("Derecha: Btn 3");
 						  BotonA = 0;
@@ -920,7 +918,7 @@ ISR(TIMER1_COMPA_vect)			//Lectura de sensores//Falta<--------------------------
 	at2 = A/1000;
 	at3 = A/100 - at2*10;
 	at4 = A/10-100*at2 - at3*10;
-	at5 = A - 1000*at2 - at3*100 - at2*10;
+	at5 = A - 1000*at2 - at3*100 - at4*10;
 	USART_Transmit_char(at2);
 	USART_Transmit_char(at3);
 	USART_Transmit_char(at4);
@@ -952,9 +950,6 @@ ISR(TIMER1_COMPA_vect)			//Lectura de sensores//Falta<--------------------------
 	USART_Transmit_char(at5);	
 	
 	Mostrar_LCD = true;
-	//USART_Transmit_Wifi(Wifi_Buff);
-	//uint8_t hola = 16;
-	//USART_Transmit_char(hola);
 }
 
 
