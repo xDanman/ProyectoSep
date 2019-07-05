@@ -36,12 +36,14 @@
 #define s6 6
 #define s7 7
 #define s8 8
+#define s9 9
+#define s10 10
 
 #define TMP102_READ	 	0x91
 #define TMP102_WRITE 	0x90
 
-
-
+void Change_max(float *h, int a);
+void Change_min(float *h, int a);
 void setup_adc(void);
 int valorAdc(void);
 void init_GPIO(void);
@@ -81,6 +83,10 @@ uint8_t Prediccion;
 
 float t_ent ;
 float h_ent ;
+float t_max;
+float t_min = 50;
+float h_max;
+float h_min = 100;
 
 uint8_t BotonA;
 uint8_t BotonI;
@@ -100,6 +106,8 @@ int main(void)
 	char buffera[15];
 	char bufferR[6];
 	char bufferti[10];
+	char buffertm[6];
+	char bufferhm[6];
 	/////////////Initialization/////
 	
 	init_GPIO();
@@ -186,18 +194,26 @@ int main(void)
 					   
 	       case s2 :  if(BotonI)
 					  {
-                        nextstate = s8;
-						A_Temperatura= false;
+                        nextstate = s10;
 						OCR1A = 0; //Resteo Timer
-                        /*
-						Prediccion
-						*/
-						LCD_string("Prediccion");
-						OCR1A = 0xF423;
-						A_Prediccion = true;
-						BotonA = 0;
-						BotonI = 0;
-						BotonD = 0;
+						
+						DHT_Read(temperature,humidity);
+						ftoa(h_max,bufferh,1);
+						ftoa(h_min,bufferhm,1);
+						LCD_Cmd(0x01);
+						LCD_string("H.Max:");
+						LCD_string(bufferh);
+						LCD_string("%");
+						LCD_Cmd(0xC0);
+						LCD_string("H.Min:");
+						LCD_string(bufferhm);
+						LCD_string("%");
+						
+	                    OCR1A = 0xF423;
+	                    A_Temperatura = true;
+	                    BotonA = 0;
+	                    BotonI = 0;
+	                    BotonD = 0;
 	                  } 
 	                  else if(BotonD)
 					  {
@@ -521,25 +537,24 @@ int main(void)
 	                  } 
 	                  else if(BotonD)
 					  {
-	                    nextstate = s2;
+	                    nextstate = s9;
 						A_Prediccion = false;
+						
 						OCR1A = 0; //Resteo Timer
-						DHT_Read(temperature,humidity);
-						tmpint = tmp102Read();
-						t_ent = (float)temperature[0];
-						ftoa(t_ent,buffert,1);
-						itoa(tmpint, bufferti, 10);
+						ftoa(t_max,buffert,1);
+						ftoa(t_min,buffertm,1);
 						LCD_Cmd(0x01);
-						LCD_string("Tmp.Ext:");
+						LCD_string("T.Max:");
 						LCD_string(buffert);
 						LCD_print(0xDF);
 						LCD_string("C");
 						LCD_Cmd(0xC0);
-						LCD_string("Tmp.Int:");
-						LCD_string(bufferti);
+						LCD_string("T.Min:");
+						LCD_string(buffertm);
 						LCD_print(0xDF);
 						LCD_string("C");
 						OCR1A = 0xF423;
+						
 						A_Temperatura = true;
 						BotonA = 0;
 						BotonI = 0;
@@ -556,6 +571,141 @@ int main(void)
 							  */
 							LCD_Cmd(0x01);
 							LCD_string("Prediccion:");
+							Mostrar_LCD = false;
+						  }
+	                  }
+	                  break;
+			case s9 :  if(BotonI)
+					  {
+                        nextstate = s8;
+					    A_Temperatura = false;
+						OCR1A = 0; //Resteo Timer
+						ftoa(t_max,buffert,1);
+						ftoa(t_min,buffertm,1);
+						LCD_Cmd(0x01);
+						LCD_string("T.Max:");
+						LCD_string(buffert);
+						LCD_print(0xDF);
+						LCD_string("C");
+						LCD_Cmd(0xC0);
+						LCD_string("T.Min:");
+						LCD_string(buffertm);
+						LCD_print(0xDF);
+						LCD_string("C");
+						OCR1A = 0xF423;
+						A_Prediccion = true;
+						BotonA = 0;
+						BotonI = 0;
+						BotonD = 0;
+	                  } 
+	                  else if(BotonD)
+					  {
+	                    nextstate = s10;
+	                    OCR1A = 0; //Resteo Timer
+						
+						DHT_Read(temperature,humidity);
+						ftoa(h_max,bufferh,1);
+						ftoa(h_min,bufferhm,1);
+						LCD_Cmd(0x01);
+						LCD_string("H.Max:");
+						LCD_string(bufferh);
+						LCD_string("%");
+						LCD_Cmd(0xC0);
+						LCD_string("H.Min:");
+						LCD_string(bufferhm);
+						LCD_string("%");
+						
+	                    OCR1A = 0xF423;
+	                    A_Temperatura = true;
+	                    BotonA = 0;
+	                    BotonI = 0;
+	                    BotonD = 0;
+	                  }
+	                  else
+					  {
+	                      nextstate = s9;
+						  if(Mostrar_LCD)
+						  {
+								ftoa(t_max,buffert,1);
+								ftoa(t_min,buffertm,1);
+								LCD_Cmd(0x01);
+								LCD_string("T.Max:");
+								LCD_string(buffert);
+								LCD_print(0xDF);
+								LCD_string("C");
+								LCD_Cmd(0xC0);
+								LCD_string("T.Min:");
+								LCD_string(buffertm);
+								LCD_print(0xDF);
+								LCD_string("C");
+								Mostrar_LCD = false;
+						  }
+	                  }
+	                  break;
+			case s10 :  if(BotonI)
+					    {
+                        nextstate = s9;
+					    A_Temperatura = true;
+						OCR1A = 0; //Resteo Timer
+						ftoa(t_max,buffert,1);
+						ftoa(t_min,buffertm,1);
+						LCD_Cmd(0x01);
+						LCD_string("T.Max:");
+						LCD_string(buffert);
+						LCD_print(0xDF);
+						LCD_string("C");
+						LCD_Cmd(0xC0);
+						LCD_string("T.Min:");
+						LCD_string(buffertm);
+						LCD_print(0xDF);
+						LCD_string("C");
+						OCR1A = 0xF423;
+						BotonA = 0;
+						BotonI = 0;
+						BotonD = 0;
+	                  } 
+	                  else if(BotonD)
+					  {
+	                    nextstate = s2;
+	                    OCR1A = 0; //Resteo Timer
+						
+	                    DHT_Read(temperature,humidity);
+	                    tmpint = tmp102Read();
+	                    t_ent = (float)temperature[0];
+	                    ftoa(t_ent,buffert,1);
+	                    itoa(tmpint, bufferti, 10);
+	                    LCD_Cmd(0x01);
+	                    LCD_string("Tmp.Ext:");
+	                    LCD_string(buffert);
+	                    LCD_print(0xDF);
+	                    LCD_string("C");
+	                    LCD_Cmd(0xC0);
+	                    LCD_string("Tmp.Int:");
+	                    LCD_string(bufferti);
+	                    LCD_print(0xDF);
+	                    LCD_string("C");
+						
+	                    OCR1A = 0xF423;
+	                    A_Temperatura = true;
+	                    BotonA = 0;
+	                    BotonI = 0;
+	                    BotonD = 0;
+	                  }
+	                  else
+					  {
+	                      nextstate = s10;
+						  if(Mostrar_LCD)
+						  {
+							ftoa(h_max,bufferh,1);
+							ftoa(h_min,bufferhm,1);
+							LCD_Cmd(0x01);
+							LCD_string("H.Max:");
+							LCD_string(bufferh);
+							LCD_string("%");
+							LCD_Cmd(0xC0);
+							LCD_string("H.Min:");
+							LCD_string(bufferhm);
+							LCD_string("%");
 							Mostrar_LCD = false;
 						  }
 	                  }
@@ -667,6 +817,12 @@ ISR(TIMER1_COMPB_vect)			//Lectura de sensores//Falta<--------------------------
 	if(A_Temperatura | A_Humedad | A_Rocio)
 	{
 		DHT_Read(temperature,humidity);
+		t_ent = (float)temperature[0];
+		h_ent = (float)humidity[0];
+		Change_max(&t_ent,0);
+		Change_max(&h_ent,1);
+		Change_min(&t_ent,0);
+		Change_min(&h_ent,1);
 		tmpint = tmp102Read();
 	}
 	if(A_Presion)
@@ -801,5 +957,41 @@ int16_t tmp102Read(void)
 	temp /= 16;
 	
 	return(temp);
+}
+
+void Change_max(float *h, int a)
+{
+	if(a)
+	{
+		if(*h > h_max)
+		{
+			h_max = *h;
+		}
+	}
+	else
+	{
+		if(*h > t_max)
+		{
+			t_max = *h;
+		}		
+	}
+	
+}
+void Change_min(float *h,int a)
+{
+	if(a)
+	{
+		if(*h < h_min)
+		{
+			h_min = *h;
+		}
+	}
+	else
+	{
+		if(*h < t_min)
+		{
+			t_min = *h;
+		}
+	}
 }
 
