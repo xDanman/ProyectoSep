@@ -48,9 +48,9 @@ int D_bits;
 uint8_t USART_Init(struct USART_configuration config)
 {
 	ubrr = Fclock/config.baudrate/16-1;
-	
-	UBRR0H = (unsigned char)(ubrr>>8);
-	UBRR0L = (unsigned char)ubrr;
+	UBRR0 = 8;
+	/*UBRR0H = (unsigned char)(ubrr>>8);
+	UBRR0L = (unsigned char)ubrr;*/
 	/*Enable  and transmitter */
 	UCSR0B = (1<<TXEN0) | (1<<RXEN0);
 	/* Set frame format: data, stop bit y paridad */

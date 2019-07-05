@@ -93,6 +93,12 @@ uint8_t BotonI;
 uint8_t BotonD;
 int16_t tmpint;
 
+float at1;
+uint8_t at2;
+uint8_t at3;
+uint8_t at4;
+uint8_t at5;
+
 rtc_t Reloj;
 
 int main(void)
@@ -865,49 +871,90 @@ ISR(TIMER1_COMPA_vect)			//Lectura de sensores//Falta<--------------------------
 	t_ent = (float)temperature[0];
 	h_ent = (float)humidity[0];
 	
-	wifi_buf = (uint8_t*) &t_ent;
-	Wifi_Buff[0] = *wifi_buf++;
-	Wifi_Buff[1] = *wifi_buf++;
-	Wifi_Buff[2] = *wifi_buf++;
-	Wifi_Buff[3] = *wifi_buf++;
+	at1 = ((float)temperature[0])*100;
+	at2 = at1/1000;
+	at3 = at1/100-10*at2;
+	at4 = at1/10 - 100*at2 - at3*10;
+	at5 = at1- 1000*at2- 100*at3-10*at4;
+	USART_Transmit_char(255);
+	USART_Transmit_char(at2);
+	USART_Transmit_char(at3);
+	USART_Transmit_char(at4);
+	USART_Transmit_char(at5);
+	
+	at1 = ((float)humidity[0])*100;
+	at2 = at1/1000;
+	at3 = at1/100-10*at2;
+	at4 = at1/10 - 100*at2 - at3*10;
+	at5 = at1- 1000*at2- 100*at3-10*at4;
+	USART_Transmit_char(at2);
+	USART_Transmit_char(at3);
+	USART_Transmit_char(at4);
+	USART_Transmit_char(at5);	
+
+
+	at2 = P/100000;
+	at3 = P/10000-10*at2;
+	at4 = P/1000 - 100*at2 - at3*10;
+	at5 = P/100- 1000*at2- 100*at3-10*at4;
+	int at6 = P/10 - 10000*at2 - 1000*at3 - 100*at4 - 10*at5;
+	int at7 = P- 100000*at2 - 10000*at3 - 1000*at4 - 100*at5 - 10*at6;
+	USART_Transmit_char(at2);
+	USART_Transmit_char(at3);
+	USART_Transmit_char(at4);
+	USART_Transmit_char(at5);
+	USART_Transmit_char(at6);	
+	USART_Transmit_char(at7);		
 	
 	
-	wifi_buf = (uint8_t*) &h_ent;
-	Wifi_Buff[4] = *wifi_buf++;
-	Wifi_Buff[5] = *wifi_buf++;
-	Wifi_Buff[6] = *wifi_buf++;
-	Wifi_Buff[7] = *wifi_buf++;
+	at1 = altitud*10;
+	at2 = at1/1000;
+	at3 = at1/100-10*at2;
+	at4 = at1/10 - 100*at2 - at3*10;
+	at5 = at1- 1000*at2- 100*at3-10*at4;
+	USART_Transmit_char(at2);
+	USART_Transmit_char(at3);
+	USART_Transmit_char(at4);
+	USART_Transmit_char(at5);
 	
-	Wifi_Buff[8] = (uint8_t) ((P>>24)&0x000000FF);
-	Wifi_Buff[9] = (uint8_t) ((P>>16)&0x000000FF);
-	Wifi_Buff[10] = (uint8_t) ((P>>8)&0x000000FF);
-	Wifi_Buff[11] = (uint8_t) (P&0x000000FF);
-	
-	
-	wifi_buf = (uint8_t*) &altitud;
-	Wifi_Buff[12] = *wifi_buf++;
-	Wifi_Buff[13] = *wifi_buf++;
-	Wifi_Buff[14] = *wifi_buf++;
-	Wifi_Buff[15] = *wifi_buf++;
-	
-	Wifi_Buff[16] = (uint8_t) ((A>>8)&0x00FF);
-	Wifi_Buff[17] = (uint8_t) (A&0x00FF);
+	at2 = A/1000;
+	at3 = A/100 - at2*10;
+	at4 = A/10-100*at2 - at3*10;
+	at5 = A - 1000*at2 - at3*100 - at2*10;
+	USART_Transmit_char(at2);
+	USART_Transmit_char(at3);
+	USART_Transmit_char(at4);
+	USART_Transmit_char(at5);
 	
 	
-	wifi_buf = (uint8_t*) &Pr;
-	Wifi_Buff[18] = *wifi_buf++;
-	Wifi_Buff[19] = *wifi_buf++;
-	Wifi_Buff[20] = *wifi_buf++;
-	Wifi_Buff[21] = *wifi_buf++;
 	
-	Wifi_Buff[22] = Prediccion;
+	at1 = Pr*100;
+	at2 = at1/1000;
+	at3 = at1/100-10*at2;
+	at4 = at1/10 - 100*at2 - at3*10;
+	at5 = at1- 1000*at2- 100*at3-10*at4;
+	USART_Transmit_char(at2);
+	USART_Transmit_char(at3);
+	USART_Transmit_char(at4);
+	USART_Transmit_char(at5);
 	
-	Wifi_Buff[23] = (uint8_t) ((tmpint>>8)&0x00FF);
-	Wifi_Buff[24] = (uint8_t) (tmpint&0x00FF);
+	USART_Transmit_char(Prediccion);
+	
+	
+	at1 = tmpint*100;
+	at2 = at1/1000;
+	at3 = at1/100-10*at2;
+	at4 = at1/10 - 100*at2 - at3*10;
+	at5 = at1- 1000*at2- 100*at3-10*at4;
+	USART_Transmit_char(at2);
+	USART_Transmit_char(at3);
+	USART_Transmit_char(at4);
+	USART_Transmit_char(at5);	
 	
 	Mostrar_LCD = true;
-	
-	USART_Transmit_Wifi(Wifi_Buff);
+	//USART_Transmit_Wifi(Wifi_Buff);
+	//uint8_t hola = 16;
+	//USART_Transmit_char(hola);
 }
 
 
