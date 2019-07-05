@@ -209,14 +209,9 @@ long getPressure(uint8_t oss){
 	
 	
 	
-long altitude(long P){//DOnt work, i think
-	long alt;
-	
-	double razon = P/101325;
-	
-	double elv = pow(razon,1/5.255);
-	
-	alt = (long) 44330*(1-elv);
-	
+double altitude(long P){//DOnt work, i think
+	double alt;
+	double razon = ((double)P)/108262;
+	alt =  44330*(1-pow(razon,0.1903));	
 	return alt;
 	};

@@ -29,13 +29,23 @@
 #include "I2C_implement_me.h"
 
 
+void i2c_begin(void)
+{
+	TWBR = 12;									// 400 kHz at 16MHz crystal and no prescaler
+	TWSR &= ~((1 << TWPS1) | (1 << TWPS0));		// prescaler 0
+	TWDR = 0xFF;								// sending only ones equals an idle high SDA line
+	TWCR = (1<<TWEN)|							// Enable TWI-interface and release TWI pins. 
+	(0<<TWIE)|(0<<TWINT)|				// Disable Interrupt.
+	(0<<TWEA)|(0<<TWSTA)|(0<<TWSTO)|	// No Signal requests.
+	(0<<TWWC);
+}
+
+
 // Send a start condition
 void i2cSendStart()
 {
 	TWCR = (1<<TWINT)|(1<<TWSTA)|(1<<TWEN);
 }
-
-
 
 
 // Send a stop condition

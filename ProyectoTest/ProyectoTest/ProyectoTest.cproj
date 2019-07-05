@@ -146,13 +146,34 @@
     <Compile Include="bmp180\bmp180.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="dht\DHT.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="dht\DHT.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="dht\DHT_Settings.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="dht\IO_Macros.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="i2c\I2C_implement_me.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="i2c\I2C_implement_me.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="main.c">
+    <Compile Include="RTC\rtc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="RTC\rtc.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="RTC\stdutils.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="SensoresTest.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="USART\USART_implement_me.c">
@@ -166,6 +187,8 @@
     <Folder Include="i2c" />
     <Folder Include="16x2" />
     <Folder Include="bmp180" />
+    <Folder Include="dht" />
+    <Folder Include="RTC" />
     <Folder Include="USART" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />

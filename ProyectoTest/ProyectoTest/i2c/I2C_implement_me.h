@@ -19,6 +19,8 @@
 
 #include <stdbool.h>
 
+void i2c_begin();
+
 // Send a start condition
 void i2cSendStart();
 

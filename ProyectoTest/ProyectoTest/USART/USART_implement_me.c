@@ -25,8 +25,6 @@
 
 // includes
 #define F_CPU	16000000UL		// MCU Clock Speed - needed for baud rate value computation
-#define TX_BUFFLEN 30			// Send buffer size
-#define RX_BUFFLEN 30			// Receive buffer size
 #define Fclock 16000000UL
 
 // includes
@@ -95,6 +93,15 @@ void USART_Transmit_String(char* string)
 	}
 }
 
+void USART_Transmit_Wifi(uint8_t* data)
+{
+	int counter = 0;
+	while(counter!=25){
+		USART_Transmit_char(*data);
+		counter = counter + 1;
+		data++;
+	}
+}
 
 
 // Receives a single character.

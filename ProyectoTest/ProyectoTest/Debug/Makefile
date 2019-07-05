@@ -36,6 +36,8 @@ SUBDIRS :=  \
 ../i2c \
 ../16x2 \
 ../bmp180 \
+../dht \
+../RTC \
 ../USART
 
 
@@ -43,8 +45,10 @@ SUBDIRS :=  \
 C_SRCS +=  \
 ../16x2/LCD16x2.c \
 ../bmp180/bmp180.c \
+../dht/DHT.c \
 ../i2c/I2C_implement_me.c \
-../main.c \
+../RTC/rtc.c \
+../SensoresTest.c \
 ../USART/USART_implement_me.c
 
 
@@ -57,29 +61,37 @@ ASM_SRCS +=
 OBJS +=  \
 16x2/LCD16x2.o \
 bmp180/bmp180.o \
+dht/DHT.o \
 i2c/I2C_implement_me.o \
-main.o \
+RTC/rtc.o \
+SensoresTest.o \
 USART/USART_implement_me.o
 
 OBJS_AS_ARGS +=  \
 16x2/LCD16x2.o \
 bmp180/bmp180.o \
+dht/DHT.o \
 i2c/I2C_implement_me.o \
-main.o \
+RTC/rtc.o \
+SensoresTest.o \
 USART/USART_implement_me.o
 
 C_DEPS +=  \
 16x2/LCD16x2.d \
 bmp180/bmp180.d \
+dht/DHT.d \
 i2c/I2C_implement_me.d \
-main.d \
+RTC/rtc.d \
+SensoresTest.d \
 USART/USART_implement_me.d
 
 C_DEPS_AS_ARGS +=  \
 16x2/LCD16x2.d \
 bmp180/bmp180.d \
+dht/DHT.d \
 i2c/I2C_implement_me.d \
-main.d \
+RTC/rtc.d \
+SensoresTest.d \
 USART/USART_implement_me.d
 
 OUTPUT_FILE_PATH +=ProyectoTest.elf
@@ -110,6 +122,13 @@ bmp180/bmp180.o: ../bmp180/bmp180.c
 	@echo Finished building: $<
 	
 
+dht/DHT.o: ../dht/DHT.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328p -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\atmega328p" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
 i2c/I2C_implement_me.o: ../i2c/I2C_implement_me.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
@@ -117,7 +136,14 @@ i2c/I2C_implement_me.o: ../i2c/I2C_implement_me.c
 	@echo Finished building: $<
 	
 
-./main.o: .././main.c
+RTC/rtc.o: ../RTC/rtc.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328p -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\atmega328p" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+./SensoresTest.o: .././SensoresTest.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328p -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\atmega328p" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

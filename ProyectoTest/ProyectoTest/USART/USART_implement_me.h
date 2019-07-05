@@ -29,7 +29,7 @@ struct USART_configuration
 };
 
 
-// Call once to initialise USART communication
+// Call once to initialize USART communication
 uint8_t USART_Init(struct USART_configuration config);
 
 // Transmits a single character
@@ -38,6 +38,7 @@ void USART_Transmit_char(uint8_t data );
 // Transmits a given string
 void USART_Transmit_String(char* string);
 
+void USART_Transmit_Wifi(uint8_t* data);
 // Receives a single character
 char USART_Receive_char(void);
 

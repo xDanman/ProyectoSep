@@ -25,6 +25,6 @@ long read_pressure(uint8_t oss);
 void begin_bmp180(void);
 long getTemperature(void);
 long getPressure(uint8_t oss);
-long altitude(long P);
+double altitude(long P);
 
 #endif /* BMP180_H_ */
